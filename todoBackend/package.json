@@ -1,0 +1,1 @@
+{"name":"todobackend","version":"1.0.0","description":"","main":"index.js","scripts":{"start":"nodemon app.js"},"keywords":[],"author":"","license":"ISC","dependencies":{"@sequelize/core":"^7.0.0-alpha.10","express":"^4.17.3","express-generator-typescript":"^1.8.3","pg":"^8.7.3","pg-hstore":"^2.3.4"},"devDependencies":{"nodemon":"^2.0.15"}}
