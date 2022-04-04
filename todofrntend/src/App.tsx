@@ -1,30 +1,34 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 
-import { ITask } from './Interface';
+import { ApiTask, ITask } from './Interface';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import axios from 'axios';
 function App() {
   // const url = 'http://localhost:3001/';
   const [task, setTask] = useState('');
-  const [todoTask, setTodoTask] = useState<ITask[]>([]);
-  const [completedTodoTask, setCompletedTodoTask] = useState<ITask[]>([]);
+  const [todoTask, setTodoTask] = useState<ApiTask[]>([]);
+  const [completedTodoTask, setCompletedTodoTask] = useState<ApiTask[]>([]);
   const instance = axios.create({ baseURL: 'http://localhost:3001' });
   const changing = (event: ChangeEvent<HTMLInputElement>): void => {
     setTask(event.target.value);
   };
 
   const addTask = (): void => {
-    const newTask = { taskName: task };
-    if (newTask.taskName === '') {
-      return;
-    }
-    setTodoTask([...todoTask, newTask]);
-    setTask('');
+    // const newTask = { taskName: task };
+    // if (newTask.taskName === '') {
+    //   return;
+    // }
+    // setTodoTask([...todoTask, newTask]);
+    // setTask('');
 
-    instance.post('/test', {
-      task,
-    });
+    instance
+      .post('/test', {
+        task,
+      })
+      .then((res) => {
+        setTodoTask([...todoTask, res.data]);
+      });
   };
 
   const deleteItem = (ind: number) => {
@@ -32,17 +36,28 @@ function App() {
     instance.delete('/delete', {});
   };
   const completedTask = (ind: number): void => {
-    const completedTasksNow = todoTask.filter((obj, index) => index === ind);
-    const complete = completedTasksNow[0].taskName;
-    const newcompletedTask = { taskName: complete };
-    instance.post('/completed', {
-      ind,
-      complete,
-    });
-    setCompletedTodoTask([...completedTodoTask, newcompletedTask]);
-    setTodoTask(todoTask.filter((obj, index) => index !== ind));
+    instance
+      .post('/complete', {
+        ind,
+      })
+      .then((res) => {
+        setCompletedTodoTask([...completedTodoTask, res.data]);
+        setTodoTask(todoTask.filter((obj, index) => index !== ind));
+      });
+    // setCompletedTodoTask([...completedTodoTask, newcompletedTask]);
+    //
   };
-  let char = instance.get('/getting', {});
+  useEffect(() => {
+    let char = instance.get<ApiTask[]>('/getting').then((res) => {
+      setTodoTask(res.data);
+    });
+    let completedTodo = instance
+      .get<ApiTask[]>('/getting?inactive=true')
+      .then((res) => {
+        setCompletedTodoTask(res.data);
+      });
+  }, []);
+  //
   return (
     <div className='App'>
       <div className='inputContainer'>
@@ -69,17 +84,17 @@ function App() {
             return (
               <>
                 <ul className='activeListingTodo'>
-                  {e.taskName}
+                  {e.task}
 
                   <div className='actiontool'>
-                    <i
+                    {/* <i
                       className='faTask fa-solid fa-xmark fa-lg'
-                      onClick={() => deleteItem(ind)}
-                    ></i>
+                      onClick={() => deleteItem(e.id)}
+                    ></i> */}
 
                     <i
                       className='faClose fa-solid fa-check fa-lg'
-                      onClick={() => completedTask(ind)}
+                      onClick={() => completedTask(e.id)}
                     ></i>
                   </div>
                 </ul>
@@ -92,7 +107,7 @@ function App() {
           {completedTodoTask.map((e, ind) => {
             return (
               <>
-                <ul className={'nothingList'}>{e.taskName}</ul>
+                <ul className={'nothingList'}>{e.task}</ul>
               </>
             );
           })}
