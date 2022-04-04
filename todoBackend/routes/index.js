@@ -28,24 +28,48 @@ router.get('/GET', async (req, res) => {
 //   return res.status(200).json({ msg: 'success' });
 // });
 router.get('/getting', async (req, res) => {
-  const getting = await models.Todo.findAll({});
-  return res.status(200).json(getting);
+  let data = [];
+  let inactive = req.query.inactive;
+  if (inactive) {
+    data = await models.Todo.findAll({
+      where: {
+        status: 'inactive',
+      },
+    });
+  } else {
+    data = await models.Todo.findAll({
+      where: {
+        status: 'active',
+      },
+    });
+  }
+  return res.status(200).json(data);
 });
 
 router.post('/test', async (req, res) => {
   let { task } = req.body;
-  let todo = models.Todo.create({
+  let todo = await models.Todo.create({
     task: task,
     status: 'active',
   });
   return res.status(200).json(todo);
   // console.log(req.body);
 });
-router.post('complete', async (req, res) => {
-  let { ind, complete } = req.body;
+router.post('/complete', async (req, res) => {
+  let { ind } = req.body;
+  console.log(ind);
+  let todo = await models.Todo.findOne({
+    where: {
+      id: ind,
+    },
+  });
+  todo.status = 'inactive';
+  await todo.save();
+  await todo.reload();
+  return res.status(200).json(todo);
 });
 
-router.delete('delete', async (req, res) => {
+router.delete('/delete', async (req, res) => {
   let { ind, task } = req.body;
   where: {
     id === ind;
