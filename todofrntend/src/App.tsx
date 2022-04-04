@@ -35,10 +35,14 @@ function App() {
     const completedTasksNow = todoTask.filter((obj, index) => index === ind);
     const complete = completedTasksNow[0].taskName;
     const newcompletedTask = { taskName: complete };
+    instance.post('/completed', {
+      ind,
+      complete,
+    });
     setCompletedTodoTask([...completedTodoTask, newcompletedTask]);
     setTodoTask(todoTask.filter((obj, index) => index !== ind));
   };
-  instance.get('/getting', {});
+  let char = instance.get('/getting', {});
   return (
     <div className='App'>
       <div className='inputContainer'>
