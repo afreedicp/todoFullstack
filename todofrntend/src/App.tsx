@@ -5,17 +5,19 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import axios from 'axios';
 function App() {
-  const url = 'http://localhost:3001/';
+  // const url = 'http://localhost:3001/';
   const [task, setTask] = useState('');
   const [todoTask, setTodoTask] = useState<ITask[]>([]);
   const [completedTodoTask, setCompletedTodoTask] = useState<ITask[]>([]);
-  const [isActive, setIsActive] = useState(true);
   const changing = (event: ChangeEvent<HTMLInputElement>): void => {
     setTask(event.target.value);
   };
 
   const addTask = (): void => {
     const newTask = { taskName: task };
+    if (newTask.taskName === '') {
+      return;
+    }
     setTodoTask([...todoTask, newTask]);
     setTask('');
     const instance = axios.create({ baseURL: 'http://localhost:3001' });

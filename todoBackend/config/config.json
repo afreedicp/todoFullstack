@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "devafz",
+    "password": 1234,
+    "database": "todo",
+    "host": "localhost",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "devafz",
+    "password": 1234,
+    "database": "todo",
+    "host": "localhost",
+    "dialect": "postgres"
+  },
+  "production": {
+   "username": "devafz",
+    "password": 1234,
+    "database": "todo",
+    "host": "localhost",
+    "dialect": "postgres"
+  }
+}
