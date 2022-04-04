@@ -41,6 +41,9 @@ router.post('/test', async (req, res) => {
   return res.status(200).json(todo);
   // console.log(req.body);
 });
+router.post('complete', async (req, res) => {
+  let { ind, complete } = req.body;
+});
 
 router.delete('delete', async (req, res) => {
   let { ind, task } = req.body;
