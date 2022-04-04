@@ -4,7 +4,9 @@
             "tableName": "Todos",
             "schema": {
                 "id": {
+                    "autoIncrement": true,
                     "primaryKey": true,
+                    "initialValue": 0,
                     "field": "id",
                     "seqType": "Sequelize.INTEGER"
                 },

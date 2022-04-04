@@ -9,6 +9,7 @@ function App() {
   const [task, setTask] = useState('');
   const [todoTask, setTodoTask] = useState<ITask[]>([]);
   const [completedTodoTask, setCompletedTodoTask] = useState<ITask[]>([]);
+  const instance = axios.create({ baseURL: 'http://localhost:3001' });
   const changing = (event: ChangeEvent<HTMLInputElement>): void => {
     setTask(event.target.value);
   };
@@ -20,13 +21,15 @@ function App() {
     }
     setTodoTask([...todoTask, newTask]);
     setTask('');
-    const instance = axios.create({ baseURL: 'http://localhost:3001' });
+
     instance.post('/test', {
-      newTask,
+      task,
     });
   };
+
   const deleteItem = (ind: number) => {
     setTodoTask(todoTask.filter((obj, index) => index !== ind));
+    instance.delete('/delete', {});
   };
   const completedTask = (ind: number): void => {
     const completedTasksNow = todoTask.filter((obj, index) => index === ind);
@@ -35,7 +38,7 @@ function App() {
     setCompletedTodoTask([...completedTodoTask, newcompletedTask]);
     setTodoTask(todoTask.filter((obj, index) => index !== ind));
   };
-
+  instance.get('/getting', {});
   return (
     <div className='App'>
       <div className='inputContainer'>

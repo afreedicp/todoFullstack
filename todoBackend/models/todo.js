@@ -19,7 +19,9 @@ module.exports = (sequelize, DataTypes) => {
     {
       id: {
         type: DataTypes.INTEGER,
+        autoIncrement: true,
         primaryKey: true,
+        initialValue: 0,
       },
       // Model attributes are defined here
       task: {

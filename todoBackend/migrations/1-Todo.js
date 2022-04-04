@@ -12,7 +12,7 @@ var Sequelize = require('sequelize');
 var info = {
     "revision": 1,
     "name": "Todo",
-    "created": "2022-04-04T05:54:32.630Z",
+    "created": "2022-04-04T09:37:45.808Z",
     "comment": ""
 };
 
@@ -24,7 +24,9 @@ var migrationCommands = [{
             "id": {
                 "type": Sequelize.INTEGER,
                 "field": "id",
-                "primaryKey": true
+                "initialValue": 0,
+                "primaryKey": true,
+                "autoIncrement": true
             },
             "task": {
                 "type": Sequelize.STRING,
